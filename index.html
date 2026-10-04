@@ -12,7 +12,6 @@
 <meta name="apple-mobile-web-app-title" content="Cash Book">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#03082A">
-<text y=%22.9em%22 font-size=%2290%22>💼</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
@@ -160,12 +159,14 @@ nav.bottom .bar{max-width:520px;margin:0 auto;display:flex;align-items:center;ju
 .fab svg{width:26px;height:26px}
 
 /* sheets */
-.scrim{position:fixed;inset:0;background:rgba(2,4,24,.55);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);z-index:40;opacity:0;transition:opacity .28s}
+.scrim{position:fixed;inset:0;background:rgba(2,4,24,.62);z-index:40;opacity:0;transition:opacity .28s}
 .scrim.show{opacity:1}
 .sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;max-height:92%;display:flex;flex-direction:column;
   max-width:620px;margin:0 auto;background:var(--surface-solid);border-radius:26px 26px 0 0;border:1px solid var(--line);border-bottom:0;
   transform:translateY(105%);transition:transform .38s cubic-bezier(.2,.9,.25,1);padding-bottom:env(safe-area-inset-bottom,0px)}
 .sheet.show{transform:none}
+.sheet:not(.show){pointer-events:none;visibility:hidden;transition:transform .38s cubic-bezier(.2,.9,.25,1),opacity .25s,visibility 0s linear .4s}
+.sheet.show{visibility:visible}
 .sheet .grab{width:42px;height:5px;border-radius:9px;background:var(--line);margin:10px auto 2px;flex:none}
 .sheet .sh-head{display:flex;align-items:center;justify-content:space-between;padding:8px 18px 6px;flex:none}
 .sheet .sh-head h3{margin:0;font-size:18px;font-weight:700}
@@ -305,6 +306,21 @@ header.top.hide-acts .icon-btn{visibility:hidden}
 .btn-wa-o{background:rgba(31,175,90,.13);color:#1FAF5A;border:1px solid rgba(31,175,90,.35)}
 .btn-wa-o[aria-busy="true"]{opacity:.6}
 .img-preview{display:block;width:100%;border-radius:16px;margin-bottom:12px;box-shadow:var(--shadow)}
+.cpick{display:flex;flex-direction:column;gap:8px}
+.cp-sel{display:flex;align-items:center;gap:10px;width:100%;min-height:54px;padding:6px 12px;border-radius:14px;border:1px solid var(--line);background:var(--surface-2);text-align:start}
+.cp-sel .av,.cp-item .av{width:34px;height:34px;font-size:13px}
+.cp-sel svg{width:18px;height:18px;margin-inline-start:auto;opacity:.6}
+.cp-name{flex:1;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cp-ph{flex:1;color:var(--ink-3)}
+.cp-chg{font-size:13px;color:var(--accent-2)}
+.cp-list{border:1px solid var(--line);border-radius:14px;padding:8px;background:var(--surface-2)}
+.cp-list .inp{height:44px;margin-bottom:6px}
+.cp-items{max-height:228px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.cp-item{display:flex;align-items:center;gap:10px;width:100%;padding:8px;border-radius:12px;text-align:start}
+.cp-item.on{background:rgba(61,123,255,.16);box-shadow:inset 0 0 0 1px var(--accent)}
+.cp-item:active{background:var(--surface-2)}
+.mini-seg button{height:42px}
+.row2{grid-template-columns:1fr 140px}
 .theme-seg button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 @media (max-width:380px){.hero .big{font-size:34px}.hero .row{grid-template-columns:1fr 1fr}.hero .cell:last-child{display:none}}
@@ -476,7 +492,7 @@ doneDep:'تم تسجيل الإيداع',donePay:'تم تسجيل الدفعة',
 depStamp:'إيداع في حسابه',prevBal:'الرصيد السابق',dueBal:'الرصيد المستحق',creditBal:'رصيده لديكم',recordedBy:'سجّلها',sendWa:'إرسال واتساب',
 noPhoneHint:'لا يوجد رقم لهذا الزبون، سيفتح واتساب لتختار المحادثة بنفسك.',delTx:'حذف الحركة',confirmDelTx:'حذف هذه الحركة؟',txDeleted:'تم حذف الحركة',settingsSaved:'تم حفظ الإعدادات',
 themeAria:'تبديل المظهر',langAria:'تغيير اللغة',close:'إغلاق',footerDef:'شكراً لثقتكم بنا',someone:'عضو في الفريق',
-w_invNo:'فاتورة رقم',w_to:'السيد/ة',w_dep:'إيداع في حسابكم',w_pay:'دفعة مستلمة منكم',w_credit:'رصيدكم لدينا',w_contact:'للتواصل',w_asof:'بتاريخ',w_none:'لا توجد حركات',w_depS:'إيداع',w_payS:'دفعة',country:'البلد',allCountries:'كل البلدان',sendText:'إرسال كرسالة',sendImage:'إرسال كصورة',preparing:'جارِ تجهيز الصورة…',saveImgHint:'اضغط مطوّلاً على الصورة واحفظها أو شاركها، وبعدين ابعتها على واتساب.',invImage:'صورة الفاتورة',chooseSend:'إرسال الفاتورة للزبون',usdTab:'دولار $',lbpTab:'ليرة لبنانية ل.ل',dueUSD:'إجمالي ديون الدولار',dueLBP:'إجمالي ديون الليرة',
+w_invNo:'فاتورة رقم',w_to:'السيد/ة',w_dep:'إيداع في حسابكم',w_pay:'دفعة مستلمة منكم',w_credit:'رصيدكم لدينا',w_contact:'للتواصل',w_asof:'بتاريخ',w_none:'لا توجد حركات',w_depS:'إيداع',w_payS:'دفعة',change:'تغيير',country:'البلد',allCountries:'كل البلدان',sendText:'إرسال كرسالة',sendImage:'إرسال كصورة',preparing:'جارِ تجهيز الصورة…',saveImgHint:'اضغط مطوّلاً على الصورة واحفظها أو شاركها، وبعدين ابعتها على واتساب.',invImage:'صورة الفاتورة',chooseSend:'إرسال الفاتورة للزبون',usdTab:'دولار $',lbpTab:'ليرة لبنانية ل.ل',dueUSD:'إجمالي ديون الدولار',dueLBP:'إجمالي ديون الليرة',
 authSub:'سجّل دخولك حتى تفتح دفترك',login:'تسجيل الدخول',register:'حساب جديد',email:'الإيميل',password:'كلمة السر',confirmPass:'تأكيد كلمة السر',forgot:'نسيت كلمة السر؟',
 loginBtn:'دخول',registerBtn:'إنشاء الحساب',resetSent:'أرسلنا رابط تغيير كلمة السر على {e}.',enterEmail:'اكتب إيميلك أولاً.',passMismatch:'كلمتا السر غير متطابقتين.',
 logout:'تسجيل خروج',changePass:'تغيير كلمة السر',confirmLogout:'تسجيل الخروج من هذا الجهاز؟',
@@ -504,7 +520,7 @@ doneDep:'Deposit recorded',donePay:'Payment recorded',sendInvWa:'Send invoice on
 depStamp:'Deposit to account',prevBal:'Previous balance',dueBal:'Balance due',creditBal:'Credit balance',recordedBy:'Recorded by',sendWa:'Send on WhatsApp',
 noPhoneHint:'This customer has no number; WhatsApp will open so you can pick the chat.',delTx:'Delete transaction',confirmDelTx:'Delete this transaction?',txDeleted:'Transaction deleted',settingsSaved:'Settings saved',
 themeAria:'Toggle theme',langAria:'Change language',close:'Close',footerDef:'Thank you for your trust',someone:'Team member',
-w_invNo:'Invoice no.',w_to:'Customer',w_dep:'Deposit to your account',w_pay:'Payment received from you',w_credit:'Your credit with us',w_contact:'Contact',w_asof:'As of',w_none:'No transactions',w_depS:'Deposit',w_payS:'Payment',country:'Country',allCountries:'All countries',sendText:'Send as message',sendImage:'Send as image',preparing:'Preparing image…',saveImgHint:'Long-press the image to save or share it, then send it on WhatsApp.',invImage:'Invoice image',chooseSend:'Send invoice to customer',usdTab:'US Dollar $',lbpTab:'Lebanese Pound LBP',dueUSD:'Total owed in dollars',dueLBP:'Total owed in Lebanese pounds',
+w_invNo:'Invoice no.',w_to:'Customer',w_dep:'Deposit to your account',w_pay:'Payment received from you',w_credit:'Your credit with us',w_contact:'Contact',w_asof:'As of',w_none:'No transactions',w_depS:'Deposit',w_payS:'Payment',change:'Change',country:'Country',allCountries:'All countries',sendText:'Send as message',sendImage:'Send as image',preparing:'Preparing image…',saveImgHint:'Long-press the image to save or share it, then send it on WhatsApp.',invImage:'Invoice image',chooseSend:'Send invoice to customer',usdTab:'US Dollar $',lbpTab:'Lebanese Pound LBP',dueUSD:'Total owed in dollars',dueLBP:'Total owed in Lebanese pounds',
 authSub:'Sign in to open your book',login:'Sign in',register:'New account',email:'Email',password:'Password',confirmPass:'Confirm password',forgot:'Forgot password?',
 loginBtn:'Sign in',registerBtn:'Create account',resetSent:'We sent a password reset link to {e}.',enterEmail:'Enter your email first.',passMismatch:'Passwords don’t match.',
 logout:'Sign out',changePass:'Change password',confirmLogout:'Sign out on this device?',
@@ -787,7 +803,7 @@ function openSheet(title,html){
   openCust=null; lastFocus=document.activeElement;
   $('#shTitle').textContent=title; $('#shBody').innerHTML=html; $('#shBody').scrollTop=0;
   const sc=$('#scrim'); sc.hidden=false; requestAnimationFrame(()=>{ sc.classList.add('show'); $('#sheet').classList.add('show'); });
-  sheetOpen=true; setTimeout(()=>{ const f=$('#shBody [autofocus]'); if(f) f.focus(); },380);
+  sheetOpen=true; if(!matchMedia('(pointer: coarse)').matches) setTimeout(()=>{ const f=$('#shBody [autofocus]'); if(f&&document.activeElement===document.body) f.focus(); },380);
 }
 function closeSheet(){
   $('#scrim').classList.remove('show'); $('#sheet').classList.remove('show'); sheetOpen=false; openCust=null;
@@ -797,7 +813,7 @@ function closeSheet(){
 $('#scrim').onclick=closeSheet; $('#shClose').onclick=closeSheet;
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&sheetOpen) closeSheet(); });
 function toast(msg){ const el=$('#toast'); $('#toastTxt').textContent=msg; el.classList.remove('show'); void el.offsetWidth; el.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(()=>el.classList.remove('show'),2400); }
-const curSelect = (id,val) => `<select class="inp" id="${id}">${CURS.map(c=>`<option value="${c}" ${c===val?'selected':''}>${c==='USD'?'USD $':(LANG==='ar'?'ليرة ل.ل':'LBP')}</option>`).join('')}</select>`;
+const curSelect = (id,val) => `<div class="seg cseg mini-seg" id="${id}" data-v="${val}" style="margin:0"><span class="pill"></span><button type="button" data-v="USD">$</button><button type="button" data-v="LBP">ل.ل</button></div>`;
 
 /* ---------- customer form ---------- */
 function customerForm(c){
@@ -808,6 +824,7 @@ function customerForm(c){
     <div class="field"><label for="fNote">${t('note')}</label><input class="inp" id="fNote" value="${esc(c?.note||'')}" placeholder="${t('optional')}"></div>
     <button class="btn btn-p" id="fSave">${c?t('saveEdit'):t('addCustBtn')}</button>
     ${c?`<div style="height:10px"></div><button class="btn btn-d" id="fDel">${t('delCust')}</button>`:''}`);
+  const os=$('#fOpenCur'); if(os) os.querySelectorAll('button').forEach(b=>b.onclick=()=>{ os.dataset.v=b.dataset.v; });
   $('#fSave').onclick=async()=>{
     const name=$('#fName').value.trim();
     if(!name){ $('#fName').focus(); $('#fName').style.borderColor='var(--owe)'; return; }
@@ -816,7 +833,7 @@ function customerForm(c){
     try{
       await put('customers',obj);
       const op=!c&&parseAmt($('#fOpen')?.value);
-      if(op&&op>0){ const cur=$('#fOpenCur').value; await put('txns',{id:uid('t_'),customerId:obj.id,type:'deposit',currency:cur,amount:cur==='LBP'?Math.round(op):Math.round(op*100)/100,note:t('openingNote'),date:today(),invoiceNo:nextInvoice(),createdAt:Date.now(),createdBy:S.uid||null}); }
+      if(op&&op>0){ /* opening balance */ const cur=$('#fOpenCur').dataset.v; await put('txns',{id:uid('t_'),customerId:obj.id,type:'deposit',currency:cur,amount:cur==='LBP'?Math.round(op):Math.round(op*100)/100,note:t('openingNote'),date:today(),invoiceNo:nextInvoice(),createdAt:Date.now(),createdBy:S.uid||null}); }
       toast(c?t('saved'):t('added',{n:name}));
       c?openCustomer(obj.id):closeSheet();
     }catch(e){ markWrite(e); $('#fSave').disabled=false; toast(t('saveFail')); }
@@ -853,20 +870,22 @@ function txForm(type='deposit',presetCust=null){
   if(S.readOnly) return;
   if(!S.customers.length){ customerForm(); toast(t('addFirst')); return; }
   const defCur=VC;
-  const opts=[...S.customers].sort((a,b)=>(a.name||'').localeCompare(b.name||'',LANG)).map(c=>`<option value="${esc(c.id)}" ${c.id===presetCust?'selected':''}>${esc(c.name)}</option>`).join('');
+  let selCid=presetCust||'';
   openSheet(t('newTx'),`
     <div class="seg" id="tSeg" data-v="${type}"><span class="pill"></span><button data-v="deposit">${t('depLabel')}</button><button data-v="payment">${t('recvFrom')}</button></div>
     <p class="hint" id="tHint"></p>
-    <div class="field"><label for="tCust">${t('customer')}</label><select class="inp" id="tCust">${presetCust?'':`<option value="">${t('pickCust')}</option>`}${opts}</select></div>
+    <div class="field"><label>${t('customer')}</label>
+      <div class="cpick"><button type="button" class="cp-sel" id="cpSel"></button>
+        <div class="cp-list" id="cpList" ${presetCust?'hidden':''}><input class="inp" id="cpSearch" placeholder="${t('search')}" autocomplete="off"><div class="cp-items" id="cpItems"></div></div></div></div>
     <div class="field"><label>${t('currency')}</label><div class="seg cseg" id="cSeg" data-v="${defCur}" style="margin-bottom:0"><span class="pill"></span><button data-v="USD">USD $</button><button data-v="LBP">${LANG==='ar'?'ليرة لبنانية ل.ل':'Lebanese pound LBP'}</button></div></div>
-    <div class="field"><label for="tAmt">${t('amount')}</label><input class="inp num amount-inp" id="tAmt" inputmode="decimal" autofocus></div>
+    <div class="field"><label for="tAmt">${t('amount')}</label><input class="inp num amount-inp" id="tAmt" inputmode="decimal"></div>
     <div class="field"><label for="tNote">${t('desc')}</label><input class="inp" id="tNote" placeholder="${t('descPh')}"></div>
     <div class="field"><label for="tDate">${t('date')}</label><input class="inp" type="date" id="tDate" value="${today()}"></div>
     <p class="hint" id="tPrev" style="margin-top:-4px"></p>
     <button class="btn btn-p" id="tSave">${t('saveInv')}</button>`);
   const seg=$('#tSeg'),cseg=$('#cSeg');
   const upd=()=>{
-    const v=seg.dataset.v,cur=cseg.dataset.v,cid=$('#tCust').value,a=parseAmt($('#tAmt').value)||0;
+    const v=seg.dataset.v,cur=cseg.dataset.v,cid=selCid,a=parseAmt($('#tAmt').value)||0;
     $('#tAmt').placeholder = money(0,cur);
     $('#tHint').textContent = v==='deposit'?t('hintDep'):t('hintPay');
     if(cid){ const b=balances(cid)[cur],nb=b+(v==='deposit'?a:-a);
@@ -874,10 +893,23 @@ function txForm(type='deposit',presetCust=null){
   };
   seg.querySelectorAll('button').forEach(b=>b.onclick=()=>{ seg.dataset.v=b.dataset.v; upd(); });
   cseg.querySelectorAll('button').forEach(b=>b.onclick=()=>{ cseg.dataset.v=b.dataset.v; upd(); });
-  ['tCust','tAmt'].forEach(i=>$('#'+i).addEventListener('input',upd)); upd();
+  const drawSel=()=>{ const c=cust(selCid);
+    $('#cpSel').innerHTML = c ? `<span class="av" style="background:${avColor(c.id)}">${esc(initials(c.name))}</span><span class="cp-name">${esc(c.name)}</span><span class="cp-chg">${t('change')}</span>`
+      : `<span class="cp-ph">${t('pickCust')}</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="m7 10 5 5 5-5"/></svg>`;
+    $('#cpSel').classList.toggle('empty',!c); };
+  const drawList=()=>{ const q=($('#cpSearch').value||'').trim().toLowerCase();
+    const list=[...S.customers].filter(c=>!q||(c.name||'').toLowerCase().includes(q)||(c.phone||'').includes(q)).sort((a,b)=>(a.name||'').localeCompare(b.name||'',LANG));
+    $('#cpItems').innerHTML = list.length ? list.map(c=>{ const v=balances(c.id)[cseg.dataset.v],st=st1(v,cseg.dataset.v);
+      return `<button type="button" class="cp-item ${c.id===selCid?'on':''}" data-pick="${esc(c.id)}"><span class="av" style="background:${avColor(c.id)}">${esc(initials(c.name))}</span><span class="cp-name">${esc(c.name)}</span><span class="num c-${st}" style="font-size:13px;font-weight:600">${money(Math.abs(v),cseg.dataset.v)}</span></button>`; }).join('')
+      : `<div class="hint" style="padding:12px;text-align:center;margin:0">${t('noResT')}</div>`; };
+  $('#cpSel').onclick=()=>{ const l=$('#cpList'); l.hidden=!l.hidden; if(!l.hidden) drawList(); };
+  $('#cpSearch').addEventListener('input',drawList);
+  $('#cpItems').addEventListener('click',e=>{ const b=e.target.closest('[data-pick]'); if(!b) return; selCid=b.dataset.pick; $('#cpList').hidden=true; $('#cpSel').style.borderColor=''; drawSel(); upd(); });
+  cseg.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{ if(!$('#cpList').hidden) drawList(); }));
+  $('#tAmt').addEventListener('input',upd); drawSel(); drawList(); upd();
   $('#tSave').onclick=async()=>{
-    const cid=$('#tCust').value,amt=parseAmt($('#tAmt').value),cur=cseg.dataset.v;
-    if(!cid){ $('#tCust').style.borderColor='var(--owe)'; $('#tCust').focus(); return; }
+    const cid=selCid,amt=parseAmt($('#tAmt').value),cur=cseg.dataset.v;
+    if(!cid){ $('#cpSel').style.borderColor='var(--owe)'; $('#cpList').hidden=false; drawList(); return; }
     if(!(amt>0)){ $('#tAmt').style.borderColor='var(--owe)'; $('#tAmt').focus(); return; }
     const x={id:uid('t_'),customerId:cid,type:seg.dataset.v,currency:cur,amount:cur==='LBP'?Math.round(amt):Math.round(amt*100)/100,note:$('#tNote').value.trim(),date:$('#tDate').value||today(),invoiceNo:nextInvoice(),createdAt:Date.now(),createdBy:S.uid||null};
     $('#tSave').disabled=true;
