@@ -502,26 +502,26 @@ document.getElementById('logoImg').src = LOGO; document.getElementById('authLogo
 /* ---------- i18n ---------- */
 const I18N = {
 ar:{loading:'جارِ تحميل بياناتك…',totalDue:'إجمالي المستحق على الزبائن',monthIn:'مستلم الشهر',monthOut:'مودَع الشهر',customers:'الزبائن',debtors:'عليهم ديون',
-qaDep:'إيداع لزبون',qaDepSub:'يُضاف على حسابه',qaPay:'استلمت دفعة',qaPaySub:'تُخصم من حسابه',topDue:'أعلى المستحقات',allCust:'كل الزبائن',recent:'آخر الحركات',viewAll:'عرض الكل',
-newCustBtn:'+ زبون جديد',search:'ابحث بالاسم أو الرقم',fAll:'الكل',fOwe:'عليهم مبالغ',fPaid:'مسددين',fCredit:'إلهم مصاري',allTx:'كل الحركات',fDep:'إيداعات',fPayF:'دفعات مستلمة',lbpChip:'ل.ل ليرة',
+qaDep:'إيداع لزبون',qaDepSub:'دفعت عنه، يُضاف عليه',qaPay:'استلمت دفعة',qaPaySub:'استلمت منه مبلغاً',topDue:'أعلى المستحقات',allCust:'كل الزبائن',recent:'آخر الحركات',viewAll:'عرض الكل',
+newCustBtn:'+ زبون جديد',search:'ابحث بالاسم أو الرقم',fAll:'الكل',fOwe:'عليهم مبالغ',fPaid:'مسددين',fCredit:'لهم رصيد',allTx:'كل الحركات',fDep:'إيداعات',fPayF:'دفعات مستلمة',lbpChip:'ل.ل ليرة',
 settings:'الإعدادات',home:'الرئيسية',txns:'الحركات',sCo:'اسم الشركة على الفاتورة',sPhone:'رقم الشركة',sFoot:'ملاحظة أسفل الفاتورة',sLang:'اللغة',sTheme:'المظهر',tAuto:'تلقائي',tDark:'داكن',tLight:'فاتح',
 sCur:'العملة اللي تفتح عليها الصفحة',save:'حفظ الإعدادات',account:'الحساب والفريق',signedAs:'مسجّل دخول باسم',
 teamHelp:'كل شخص يدخل بحسابه الخاص (إيميل وكلمة سر). لإضافة شخص من فريقك: افتح قائمة المشاركة لهذه الصفحة وادعُه بإيميله بصلاحية محرر، فيسجّل دخوله ويشتغل على نفس الدفتر. وكل حركة تنحفظ باسم الشخص اللي سجّلها.',
 readOnly:'عندك صلاحية عرض فقط. اطلب من صاحب الدفتر صلاحية محرر حتى تضيف حركات.',syncCloud:'فواتيرك محفوظة بحسابك فقط، وما حدا غيرك بيشوفها.',syncLocal:'البيانات محفوظة على هذا الجهاز فقط في هذه النسخة.',
-owe:'عليه',paid:'مسدد',credit:'إله مصاري',noPhone:'بدون رقم',deletedCust:'زبون محذوف',depLabel:'إيداع له',payLabel:'دفعة مستلمة',
+owe:'عليه',paid:'مسدد',credit:'له رصيد',noPhone:'بدون رقم',deletedCust:'زبون محذوف',depLabel:'إيداع له',payLabel:'دفعة مستلمة',
 emptyFirstT:'ابدأ بإضافة أول زبون',emptyFirstS:'بعدها سجّل الإيداعات والدفعات وأرسل الفاتورة واتساب.',addCust:'إضافة زبون',noDueT:'لا توجد مستحقات',noDueS:'كل الزبائن مسددين حالياً.',
 noTxT:'لا توجد حركات بعد',noTxS:'اضغط زر + لتسجيل أول إيداع.',noCustT:'لا يوجد زبائن بعد',noCustS:'أضف الاسم ورقم الواتساب لترسل له الفواتير.',noResT:'لا نتائج',noResS:'جرّب اسماً آخر أو غيّر الفلتر.',noTxListS:'الحركات التي تسجلها تظهر هنا.',
-editCust:'تعديل الزبون',newCust:'زبون جديد',name:'الاسم',namePh:'مثلاً: أحمد علي',waPhone:'رقم الواتساب',opening:'رصيد سابق عليه (اختياري)',note:'ملاحظة',optional:'اختياري',
+editCust:'تعديل الزبون',newCust:'زبون جديد',name:'الاسم',namePh:'مثلاً: أحمد علي',waPhone:'رقم الواتساب',opening:'رصيد سابق (اختياري)',openOwe:'عليه دين',openCredit:'له رصيد لديّ',note:'ملاحظة',optional:'اختياري',
 saveEdit:'حفظ التعديل',addCustBtn:'إضافة الزبون',delCust:'حذف الزبون وكل حركاته',confirmDelCust:'حذف {n} وكل حركاته؟',saved:'تم حفظ التعديل',added:'تمت إضافة {n}',saveFail:'تعذر الحفظ، حاول مرة ثانية',
-custDeleted:'تم حذف الزبون',openingNote:'رصيد سابق',custAccount:'حساب الزبون',dueOn:'المستحق عليه',creditFor:'رصيد له عندك',balance:'الرصيد',fullyPaid:'مسدد بالكامل',
+custDeleted:'تم حذف الزبون',openingNote:'رصيد سابق',custAccount:'حساب الزبون',dueOn:'المستحق عليه',creditFor:'رصيده لديّ',balance:'الرصيد',fullyPaid:'مسدد بالكامل',
 recvFrom:'استلمت منه',statement:'كشف حساب',editData:'تعديل البيانات',noCustTx:'سجّل أول إيداع له من الأزرار أعلاه.',newTx:'حركة جديدة',
-hintDep:'دفعت عنه أو أودعت في حسابه، والمبلغ يُضاف على دينه.',hintPay:'سلّمك مبلغاً، ويُخصم من دينه.',customer:'الزبون',pickCust:'اختر الزبون',amount:'المبلغ',currency:'العملة',
+hintDep:'دفعت عنه أو أودعت في حسابه، والمبلغ يُضاف على دينه.',hintPay:'استلمت منه مبلغاً: يُخصم من دينه، وما يزيد يُسجَّل رصيداً له لديك.',customer:'الزبون',pickCust:'اختر الزبون',amount:'المبلغ',currency:'العملة',
 desc:'البيان',descPh:'مثلاً: إيداع في حساب التداول',date:'التاريخ',curBal:'الرصيد الحالي',after:'بعد الحركة',saveInv:'حفظ وإنشاء الفاتورة',addFirst:'أضف زبوناً أولاً',
 doneDep:'تم تسجيل الإيداع',donePay:'تم تسجيل الدفعة',sendInvWa:'إرسال الفاتورة واتساب',viewInv:'عرض الفاتورة',done:'تم',invoice:'الفاتورة',invoiceWord:'فاتورة',op:'العملية',
 depStamp:'إيداع في حسابه',prevBal:'الرصيد السابق',dueBal:'الرصيد المستحق',creditBal:'رصيده لديكم',recordedBy:'سجّلها',sendWa:'إرسال واتساب',
 noPhoneHint:'لا يوجد رقم لهذا الزبون، سيفتح واتساب لتختار المحادثة بنفسك.',delTx:'حذف الحركة',confirmDelTx:'حذف هذه الحركة؟',txDeleted:'تم حذف الحركة',settingsSaved:'تم حفظ الإعدادات',
 themeAria:'تبديل المظهر',langAria:'تغيير اللغة',close:'إغلاق',footerDef:'شكراً لثقتكم بنا',someone:'عضو في الفريق',
-w_invNo:'فاتورة رقم',w_to:'السيد/ة',w_dep:'إيداع في حسابكم',w_pay:'دفعة مستلمة منكم',w_credit:'رصيدكم لدينا',w_contact:'للتواصل',w_asof:'بتاريخ',w_none:'لا توجد حركات',w_depS:'إيداع',w_payS:'دفعة',creditTitle:'مصاري الزبائن عندي',creditList:'إلهم مصاري عندي',custCount:'{n} زبون',curPass:'كلمة السر الحالية',newPass:'كلمة السر الجديدة',savePass:'حفظ كلمة السر',passChanged:'تم تغيير كلمة السر',curWrong:'كلمة السر الحالية غلط.',enterCur:'اكتب كلمة السر الحالية.',forgotCur:'نسيت كلمة السر الحالية؟ ابعتلي رابط عالإيميل',checkJunk:'إذا ما لقيته، شوف بمجلد Junk أو Spam.',change:'تغيير',country:'البلد',allCountries:'كل البلدان',sendText:'إرسال كرسالة',sendImage:'إرسال كصورة',preparing:'جارِ تجهيز الصورة…',saveImgHint:'اضغط مطوّلاً على الصورة واحفظها أو شاركها، وبعدين ابعتها على واتساب.',invImage:'صورة الفاتورة',chooseSend:'إرسال الفاتورة للزبون',usdTab:'دولار $',lbpTab:'ليرة لبنانية ل.ل',dueUSD:'إجمالي ديون الدولار',dueLBP:'إجمالي ديون الليرة',
+w_invNo:'فاتورة رقم',w_to:'السيد/ة',w_dep:'إيداع في حسابكم',w_pay:'دفعة مستلمة منكم',w_credit:'رصيدكم لدينا',w_contact:'للتواصل',w_asof:'بتاريخ',w_none:'لا توجد حركات',w_depS:'إيداع',w_payS:'دفعة',creditTitle:'أرصدة الزبائن لديّ',creditList:'زبائن لهم رصيد لديّ',custCount:'{n} زبون',curPass:'كلمة السر الحالية',newPass:'كلمة السر الجديدة',savePass:'حفظ كلمة السر',passChanged:'تم تغيير كلمة السر',curWrong:'كلمة السر الحالية غلط.',enterCur:'اكتب كلمة السر الحالية.',forgotCur:'نسيت كلمة السر الحالية؟ ابعتلي رابط عالإيميل',checkJunk:'إذا ما لقيته، شوف بمجلد Junk أو Spam.',change:'تغيير',country:'البلد',allCountries:'كل البلدان',sendText:'إرسال كرسالة',sendImage:'إرسال كصورة',preparing:'جارِ تجهيز الصورة…',saveImgHint:'اضغط مطوّلاً على الصورة واحفظها أو شاركها، وبعدين ابعتها على واتساب.',invImage:'صورة الفاتورة',chooseSend:'إرسال الفاتورة للزبون',usdTab:'دولار $',lbpTab:'ليرة لبنانية ل.ل',dueUSD:'إجمالي ديون الدولار',dueLBP:'إجمالي ديون الليرة',
 authSub:'سجّل دخولك حتى تفتح دفترك',login:'تسجيل الدخول',register:'حساب جديد',email:'الإيميل',password:'كلمة السر',confirmPass:'تأكيد كلمة السر',forgot:'نسيت كلمة السر؟',
 loginBtn:'دخول',registerBtn:'إنشاء الحساب',resetSent:'أرسلنا رابط تغيير كلمة السر على {e}.',enterEmail:'اكتب إيميلك أولاً.',passMismatch:'كلمتا السر غير متطابقتين.',
 logout:'تسجيل خروج',changePass:'تغيير كلمة السر',confirmLogout:'تسجيل الخروج من هذا الجهاز؟',
@@ -539,17 +539,17 @@ readOnly:'You have view-only access. Ask the book owner for Editor access to add
 owe:'Owes',paid:'Settled',credit:'In credit',noPhone:'No phone',deletedCust:'Deleted customer',depLabel:'Deposit',payLabel:'Payment received',
 emptyFirstT:'Start by adding your first customer',emptyFirstS:'Then record deposits and payments and send invoices on WhatsApp.',addCust:'Add customer',noDueT:'Nothing owed',noDueS:'All customers are settled.',
 noTxT:'No transactions yet',noTxS:'Tap + to record your first deposit.',noCustT:'No customers yet',noCustS:'Add a name and WhatsApp number to send invoices.',noResT:'No results',noResS:'Try another name or change the filter.',noTxListS:'Transactions you record appear here.',
-editCust:'Edit customer',newCust:'New customer',name:'Name',namePh:'e.g. Ahmad Ali',waPhone:'WhatsApp number',opening:'Previous balance owed (optional)',note:'Note',optional:'Optional',
+editCust:'Edit customer',newCust:'New customer',name:'Name',namePh:'e.g. Ahmad Ali',waPhone:'WhatsApp number',opening:'Previous balance (optional)',openOwe:'Owes me',openCredit:'Has a balance with me',note:'Note',optional:'Optional',
 saveEdit:'Save changes',addCustBtn:'Add customer',delCust:'Delete customer and all transactions',confirmDelCust:'Delete {n} and all their transactions?',saved:'Changes saved',added:'{n} added',saveFail:'Couldn’t save. Try again.',
 custDeleted:'Customer deleted',openingNote:'Previous balance',custAccount:'Customer account',dueOn:'Amount owed',creditFor:'Credit balance',balance:'Balance',fullyPaid:'Fully settled',
 recvFrom:'Received',statement:'Statement',editData:'Edit details',noCustTx:'Record their first deposit using the buttons above.',newTx:'New transaction',
-hintDep:'You paid or deposited on their behalf; the amount is added to what they owe.',hintPay:'They paid you; the amount is deducted from what they owe.',customer:'Customer',pickCust:'Choose a customer',amount:'Amount',currency:'Currency',
+hintDep:'You paid or deposited on their behalf; the amount is added to what they owe.',hintPay:'They gave you money: it’s deducted from what they owe, and anything extra becomes money you hold for them.',customer:'Customer',pickCust:'Choose a customer',amount:'Amount',currency:'Currency',
 desc:'Description',descPh:'e.g. Trading account deposit',date:'Date',curBal:'Current balance',after:'after',saveInv:'Save and create invoice',addFirst:'Add a customer first',
 doneDep:'Deposit recorded',donePay:'Payment recorded',sendInvWa:'Send invoice on WhatsApp',viewInv:'View invoice',done:'Done',invoice:'Invoice',invoiceWord:'Invoice',op:'Type',
 depStamp:'Deposit to account',prevBal:'Previous balance',dueBal:'Balance due',creditBal:'Credit balance',recordedBy:'Recorded by',sendWa:'Send on WhatsApp',
 noPhoneHint:'This customer has no number; WhatsApp will open so you can pick the chat.',delTx:'Delete transaction',confirmDelTx:'Delete this transaction?',txDeleted:'Transaction deleted',settingsSaved:'Settings saved',
 themeAria:'Toggle theme',langAria:'Change language',close:'Close',footerDef:'Thank you for your trust',someone:'Team member',
-w_invNo:'Invoice no.',w_to:'Customer',w_dep:'Deposit to your account',w_pay:'Payment received from you',w_credit:'Your credit with us',w_contact:'Contact',w_asof:'As of',w_none:'No transactions',w_depS:'Deposit',w_payS:'Payment',creditTitle:'Customer money I’m holding',creditList:'Customers I owe money to',custCount:'{n} customers',curPass:'Current password',newPass:'New password',savePass:'Save password',passChanged:'Password changed',curWrong:'Current password is incorrect.',enterCur:'Enter your current password.',forgotCur:'Forgot your current password? Email me a link',checkJunk:'If you can’t find it, check your Junk or Spam folder.',change:'Change',country:'Country',allCountries:'All countries',sendText:'Send as message',sendImage:'Send as image',preparing:'Preparing image…',saveImgHint:'Long-press the image to save or share it, then send it on WhatsApp.',invImage:'Invoice image',chooseSend:'Send invoice to customer',usdTab:'US Dollar $',lbpTab:'Lebanese Pound LBP',dueUSD:'Total owed in dollars',dueLBP:'Total owed in Lebanese pounds',
+w_invNo:'Invoice no.',w_to:'Customer',w_dep:'Deposit to your account',w_pay:'Payment received from you',w_credit:'Your credit with us',w_contact:'Contact',w_asof:'As of',w_none:'No transactions',w_depS:'Deposit',w_payS:'Payment',creditTitle:'Customer balances I hold',creditList:'Customers with a balance',custCount:'{n} customers',curPass:'Current password',newPass:'New password',savePass:'Save password',passChanged:'Password changed',curWrong:'Current password is incorrect.',enterCur:'Enter your current password.',forgotCur:'Forgot your current password? Email me a link',checkJunk:'If you can’t find it, check your Junk or Spam folder.',change:'Change',country:'Country',allCountries:'All countries',sendText:'Send as message',sendImage:'Send as image',preparing:'Preparing image…',saveImgHint:'Long-press the image to save or share it, then send it on WhatsApp.',invImage:'Invoice image',chooseSend:'Send invoice to customer',usdTab:'US Dollar $',lbpTab:'Lebanese Pound LBP',dueUSD:'Total owed in dollars',dueLBP:'Total owed in Lebanese pounds',
 authSub:'Sign in to open your book',login:'Sign in',register:'New account',email:'Email',password:'Password',confirmPass:'Confirm password',forgot:'Forgot password?',
 loginBtn:'Sign in',registerBtn:'Create account',resetSent:'We sent a password reset link to {e}.',enterEmail:'Enter your email first.',passMismatch:'Passwords don’t match.',
 logout:'Sign out',changePass:'Change password',confirmLogout:'Sign out on this device?',
@@ -879,11 +879,12 @@ function customerForm(c){
   openSheet(c?t('editCust'):t('newCust'),`
     <div class="field"><label for="fName">${t('name')}</label><input class="inp" id="fName" value="${esc(c?.name||'')}" autofocus></div>
     <div class="field"><label for="fPhone">${t('waPhone')}</label>${phoneField(c)}</div>
-    ${c?'':`<div class="field"><label for="fOpen">${t('opening')}</label><div class="row2"><input class="inp num" id="fOpen" inputmode="decimal">${curSelect('fOpenCur',VC)}</div></div>`}
+    ${c?'':`<div class="field"><label for="fOpen">${t('opening')}</label><div class="seg" id="fOpenDir" data-v="deposit" style="margin-bottom:8px"><span class="pill"></span><button type="button" data-v="deposit">${t('openOwe')}</button><button type="button" data-v="payment">${t('openCredit')}</button></div><div class="row2"><input class="inp num" id="fOpen" inputmode="decimal">${curSelect('fOpenCur',VC)}</div></div>`}
     <div class="field"><label for="fNote">${t('note')}</label><input class="inp" id="fNote" value="${esc(c?.note||'')}" ></div>
     <button class="btn btn-p" id="fSave">${c?t('saveEdit'):t('addCustBtn')}</button>
     ${c?`<div style="height:10px"></div><button class="btn btn-d" id="fDel">${t('delCust')}</button>`:''}`);
   const os=$('#fOpenCur'); if(os) os.querySelectorAll('button').forEach(b=>b.onclick=()=>{ os.dataset.v=b.dataset.v; });
+  const od=$('#fOpenDir'); if(od) od.querySelectorAll('button').forEach(b=>b.onclick=()=>{ od.dataset.v=b.dataset.v; });
   $('#fSave').onclick=async()=>{
     const name=$('#fName').value.trim();
     if(!name){ $('#fName').focus(); $('#fName').style.borderColor='var(--owe)'; return; }
@@ -892,7 +893,7 @@ function customerForm(c){
     try{
       await put('customers',obj);
       const op=!c&&parseAmt($('#fOpen')?.value);
-      if(op&&op>0){ /* opening balance */ const cur=$('#fOpenCur').dataset.v; await put('txns',{id:uid('t_'),customerId:obj.id,type:'deposit',currency:cur,amount:cur==='LBP'?Math.round(op):Math.round(op*100)/100,note:t('openingNote'),date:today(),invoiceNo:nextInvoice(),createdAt:Date.now(),createdBy:S.uid||null}); }
+      if(op&&op>0){ /* opening balance */ const cur=$('#fOpenCur').dataset.v; await put('txns',{id:uid('t_'),customerId:obj.id,type:($('#fOpenDir')?.dataset.v==='payment'?'payment':'deposit'),currency:cur,amount:cur==='LBP'?Math.round(op):Math.round(op*100)/100,note:t('openingNote'),date:today(),invoiceNo:nextInvoice(),createdAt:Date.now(),createdBy:S.uid||null}); }
       toast(c?t('saved'):t('added',{n:name}));
       c?openCustomer(obj.id):closeSheet();
     }catch(e){ markWrite(e); $('#fSave').disabled=false; toast(t('saveFail')); }
