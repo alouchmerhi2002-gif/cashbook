@@ -387,6 +387,27 @@ header.top{gap:8px}
 .lock-hint{color:var(--ink-2);font-size:13.5px;margin:0 0 18px}
 .lock-hint.err{color:var(--late)}
 #lockPassBox{text-align:start;margin-bottom:6px}
+div.item{cursor:pointer;-webkit-tap-highlight-color:transparent}
+div.item:hover{background:var(--surface-2)}
+.qbs{display:flex;gap:6px;flex:none}
+.qb{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:var(--surface-2);border:1px solid var(--line);color:var(--accent-2);transition:transform .15s}
+.qb:active{transform:scale(.9)}
+.qb svg{width:17px;height:17px}
+.qb.wa{color:#1FAF5A}
+@media (max-width:360px){ .qbs{display:none} }
+.t-due{color:var(--accent-2);background:rgba(61,123,255,.14)}
+.tr-badge{min-width:22px;height:22px;padding:0 7px;border-radius:99px;background:var(--owe);color:#fff;font-size:12px;display:inline-grid;place-items:center;margin-inline-start:4px}
+#trashBtn svg{width:20px;height:20px}
+.tr-acts{display:flex;gap:6px;flex:none}
+.tr-btn{height:34px;padding:0 12px;border-radius:10px;background:rgba(61,123,255,.14);color:var(--accent-2);font-size:13px;font-weight:600}
+.tr-btn.del{background:var(--owe-bg);color:var(--owe);padding:0 11px}
+.conv-btn{margin:-4px 0 14px;height:44px;font-size:14px}
+.conv-box{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.conv-from,.conv-to{flex:1;border-radius:16px;padding:12px;background:var(--surface-2);border:1px solid var(--line);text-align:center;min-width:0}
+.conv-box small{display:block;color:var(--ink-2);font-size:12px}
+.conv-box b{display:block;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.conv-arrow{font-size:22px;color:var(--accent-2);flex:none}
+.hero .sub{font-size:13.5px;font-weight:500;opacity:.9}
 .theme-seg button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 @media (max-width:380px){.hero .big{font-size:34px}.hero .row{grid-template-columns:1fr 1fr}.hero .cell:last-child{display:none}}
@@ -454,6 +475,10 @@ header.top{gap:8px}
       </div>
       <h2 class="sec"><span data-i18n="topDue"></span> <button data-go="customers" data-i18n="allCust"></button></h2>
       <div class="panel" id="topDebtors"></div>
+      <div id="dueSection" hidden>
+        <h2 class="sec"><span data-i18n="duesTitle"></span></h2>
+        <div class="panel" id="dueList"></div>
+      </div>
       <div id="crSection" hidden>
         <h2 class="sec"><span data-i18n="creditList"></span> <button id="crAll" data-i18n="viewAll"></button></h2>
         <div class="panel" id="creditList"></div>
@@ -504,6 +529,7 @@ header.top{gap:8px}
         <div class="field"><label for="sCo" data-i18n="sCo"></label><input class="inp w-in" id="sCo"></div>
         <div class="field"><label for="sPhone" data-i18n="sPhone"></label><input class="inp num w-in" id="sPhone" inputmode="tel" placeholder="+961…"></div>
         <div class="field"><label for="sFoot" data-i18n="sFoot"></label><input class="inp w-in" id="sFoot"></div>
+        <div class="field"><label for="sRate" data-i18n="rate"></label><input class="inp num w-in" id="sRate" inputmode="numeric"></div>
         <div class="field"><label data-i18n="sRemind"></label>
           <div class="theme-seg" id="remSeg"><button data-d="15" data-i18n="d15"></button><button data-d="30" data-i18n="d30"></button><button data-d="60" data-i18n="d60"></button></div>
         </div>
@@ -513,6 +539,8 @@ header.top{gap:8px}
         <h2 class="sec" style="margin:0 0 6px" data-i18n="dataTitle"></h2>
         <p class="help" style="margin:0 0 14px" data-i18n="dataHelp"></p>
         <button class="btn btn-g" id="xlsBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13l4 5M12 13l-4 5"/></svg><span data-i18n="xlsBtn"></span></button>
+        <div style="height:10px"></div>
+        <button class="btn btn-g" id="trashBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg><span data-i18n="trash"></span><span class="tr-badge" id="trashCount" hidden></span></button>
       </div>
       <div class="panel" style="padding:18px" id="accountPanel">
         <h2 class="sec" style="margin:0 0 12px" data-i18n="account"></h2>
@@ -605,8 +633,14 @@ doneDep:'تم تسجيل الإيداع',donePay:'تم تسجيل الدفعة',
 depStamp:'إيداع في حسابه',prevBal:'الرصيد السابق',dueBal:'الرصيد المستحق',creditBal:'رصيده لديكم',recordedBy:'سجّلها',sendWa:'إرسال واتساب',
 noPhoneHint:'لا يوجد رقم لهذا الزبون، سيفتح واتساب لتختار المحادثة بنفسك.',delTx:'حذف الحركة',confirmDelTx:'حذف هذه الحركة؟',txDeleted:'تم حذف الحركة',settingsSaved:'تم حفظ الإعدادات',
 themeAria:'تبديل المظهر',langAria:'تغيير اللغة',close:'إغلاق',footerDef:'شكراً لثقتكم بنا',someone:'عضو في الفريق',
-w_invNo:'فاتورة رقم',w_to:'السيد/ة',w_dep:'إيداع في حسابكم',w_pay:'دفعة مستلمة منكم',w_credit:'رصيدكم لدينا',w_contact:'للتواصل',w_asof:'بتاريخ',w_none:'لا توجد حركات',w_depS:'إيداع',w_payS:'دفعة',lockTitle:'قفل بـ Face ID أو البصمة',lockOn:'مفعّل على هالجهاز',lockOff:'التطبيق بيطلب وجهك أو بصمتك لما تفتحه',lockNA:'هالجهاز أو المتصفح ما بيدعم القفل',lockSub:'التطبيق مقفول',lockTap:'اضغط على الأيقونة لتفتح بـ Face ID أو البصمة',lockBtn:'فتح',lockRetry:'ما زبط، اضغط على الأيقونة لتجرّب مرة ثانية',lockUsePass:'فتح بكلمة السر',lockEnabled:'تفعّل القفل',lockDisabled:'انطفى القفل',lockFail:'ما قدرنا نكمّل، جرّب مرة ثانية',
-report:'التقرير الشهري',fLate:'متأخرين',late:'متأخر',lateDays:'متأخر {n} يوم',lateTitle:'ديون متأخرة أكتر من {n} يوم',sRemind:'اعتبر الدين متأخر بعد',d15:'١٥ يوم',d30:'٣٠ يوم',d60:'٦٠ يوم',
+w_invNo:'فاتورة رقم',w_to:'السيد/ة',w_dep:'إيداع في حسابكم',w_pay:'دفعة مستلمة منكم',w_credit:'رصيدكم لدينا',w_contact:'للتواصل',w_asof:'بتاريخ',w_none:'لا توجد حركات',w_depS:'إيداع',w_payS:'دفعة',
+dueDate:'موعد السداد (اختياري)',dueToday:'مستحق اليوم',dueIn:'بعد {n} يوم',dueOn2:'موعد السداد: {d}',duesTitle:'مواعيد سداد قريبة',r_due:'موعد السداد المتفق عليه: {d}',
+editTx:'تعديل الحركة',edit:'تعديل',txSaved:'تم تعديل الحركة',saveChanges:'حفظ التعديلات',
+stmtSend:'إرسال كشف الحساب',stmtRows:'آخر {n} حركة',colBal:'الرصيد',
+trash:'سلة المحذوفات',trashEmpty:'السلة فاضية',trashHelp:'أي زبون أو حركة بتحذفها بتضل هون ٣٠ يوم، وبعدها بتنحذف نهائياً.',restore:'استرجاع',delForever:'حذف نهائي',confirmForever:'حذف نهائي؟ ما بيعود يرجع.',restored:'تم الاسترجاع',movedTrash:'انتقل لسلة المحذوفات',restoreCustFirst:'رجّع الزبون أولاً من السلة',trashCust:'زبون · {n} حركة',trashLeft:'بينحذف بعد {n} يوم',
+rate:'سعر صرف الدولار (بالليرة)',withLBP:'الإجمالي مع ديون الليرة',withUSD:'الإجمالي مع ديون الدولار',convert:'تحويل الرصيد إلى {c}',convTitle:'تحويل الرصيد',convRate:'سعر الصرف',convDo:'تأكيد التحويل',convDone:'تم التحويل',convNoteTo:'تحويل إلى {c} على سعر {r}',convNoteFrom:'تحويل من {c} على سعر {r}',usdName:'الدولار',lbpName:'الليرة',convHelp:'بيتصفّر الرصيد بـ {from} وبينضاف المبلغ المحوّل على حسابه بـ {to}.',
+call:'اتصال',chat:'واتساب',lockTitle:'قفل بـ Face ID أو البصمة',lockOn:'مفعّل على هالجهاز',lockOff:'التطبيق بيطلب وجهك أو بصمتك لما تفتحه',lockNA:'هالجهاز أو المتصفح ما بيدعم القفل',lockSub:'التطبيق مقفول',lockTap:'اضغط على الأيقونة لتفتح بـ Face ID أو البصمة',lockBtn:'فتح',lockRetry:'ما زبط، اضغط على الأيقونة لتجرّب مرة ثانية',lockUsePass:'فتح بكلمة السر',lockEnabled:'تفعّل القفل',lockDisabled:'انطفى القفل',lockFail:'ما قدرنا نكمّل، جرّب مرة ثانية',
+report:'التقرير الشهري',fLate:'متأخرين',late:'متأخر',lateDays:'متأخر {n} يوم',lateTitle:'ديون متأخرة',sRemind:'اعتبر الدين متأخر بعد',d15:'١٥ يوم',d30:'٣٠ يوم',d60:'٦٠ يوم',
 remind:'إرسال تذكير بالدفع',lastPay:'آخر دفعة',noPayYet:'ما في دفعات بعد',daysAgo:'من {n} يوم',
 r_hi:'مرحباً {n}،',r_body:'نودّ تذكيركم بأن الرصيد المستحق على حسابكم لدى {co} هو:',r_last:'آخر دفعة: {d}',r_none:'لم تُسجَّل أي دفعة بعد.',r_end:'نرجو التكرّم بالتسديد في أقرب وقت ممكن. شكراً لتعاملكم معنا.',
 rDep:'مودَع',rIn:'مستلم (سداد ديون)',rNet:'صافي التغيّر بالديون',rCount:'عدد الحركات',rNew:'زبائن جدد',rChart:'آخر ٦ أشهر',rTop:'أكتر الزبائن إيداعاً هالشهر',rNone:'ما في حركات بهالشهر.',rShare:'مشاركة التقرير كصورة',rPrep:'جارِ تجهيز الصورة…',
@@ -639,8 +673,14 @@ doneDep:'Deposit recorded',donePay:'Payment recorded',sendInvWa:'Send invoice on
 depStamp:'Deposit to account',prevBal:'Previous balance',dueBal:'Balance due',creditBal:'Credit balance',recordedBy:'Recorded by',sendWa:'Send on WhatsApp',
 noPhoneHint:'This customer has no number; WhatsApp will open so you can pick the chat.',delTx:'Delete transaction',confirmDelTx:'Delete this transaction?',txDeleted:'Transaction deleted',settingsSaved:'Settings saved',
 themeAria:'Toggle theme',langAria:'Change language',close:'Close',footerDef:'Thank you for your trust',someone:'Team member',
-w_invNo:'Invoice no.',w_to:'Customer',w_dep:'Deposit to your account',w_pay:'Payment received from you',w_credit:'Your credit with us',w_contact:'Contact',w_asof:'As of',w_none:'No transactions',w_depS:'Deposit',w_payS:'Payment',lockTitle:'Lock with Face ID or fingerprint',lockOn:'On for this device',lockOff:'Ask for your face or fingerprint when the app opens',lockNA:'This device or browser doesn’t support the lock',lockSub:'The app is locked',lockTap:'Tap the icon to unlock with Face ID or fingerprint',lockBtn:'Unlock',lockRetry:'That didn’t work. Tap the icon to try again',lockUsePass:'Unlock with password',lockEnabled:'Lock turned on',lockDisabled:'Lock turned off',lockFail:'Couldn’t finish. Try again',
-report:'Monthly report',fLate:'Overdue',late:'Overdue',lateDays:'{n} days overdue',lateTitle:'Debts overdue more than {n} days',sRemind:'Treat a debt as overdue after',d15:'15 days',d30:'30 days',d60:'60 days',
+w_invNo:'Invoice no.',w_to:'Customer',w_dep:'Deposit to your account',w_pay:'Payment received from you',w_credit:'Your credit with us',w_contact:'Contact',w_asof:'As of',w_none:'No transactions',w_depS:'Deposit',w_payS:'Payment',
+dueDate:'Due date (optional)',dueToday:'Due today',dueIn:'In {n} days',dueOn2:'Due: {d}',duesTitle:'Upcoming due dates',r_due:'Agreed due date: {d}',
+editTx:'Edit transaction',edit:'Edit',txSaved:'Transaction updated',saveChanges:'Save changes',
+stmtSend:'Send statement',stmtRows:'Last {n} transactions',colBal:'Balance',
+trash:'Recently deleted',trashEmpty:'Nothing here',trashHelp:'Deleted customers and transactions stay here for 30 days, then they’re removed for good.',restore:'Restore',delForever:'Delete forever',confirmForever:'Delete forever? This can’t be undone.',restored:'Restored',movedTrash:'Moved to Recently deleted',restoreCustFirst:'Restore the customer first',trashCust:'Customer · {n} transactions',trashLeft:'Removed in {n} days',
+rate:'Dollar exchange rate (in LBP)',withLBP:'Total incl. LBP debts',withUSD:'Total incl. USD debts',convert:'Convert balance to {c}',convTitle:'Convert balance',convRate:'Exchange rate',convDo:'Confirm conversion',convDone:'Converted',convNoteTo:'Converted to {c} at {r}',convNoteFrom:'Converted from {c} at {r}',usdName:'USD',lbpName:'LBP',convHelp:'The {from} balance is cleared and the converted amount is added in {to}.',
+call:'Call',chat:'WhatsApp',lockTitle:'Lock with Face ID or fingerprint',lockOn:'On for this device',lockOff:'Ask for your face or fingerprint when the app opens',lockNA:'This device or browser doesn’t support the lock',lockSub:'The app is locked',lockTap:'Tap the icon to unlock with Face ID or fingerprint',lockBtn:'Unlock',lockRetry:'That didn’t work. Tap the icon to try again',lockUsePass:'Unlock with password',lockEnabled:'Lock turned on',lockDisabled:'Lock turned off',lockFail:'Couldn’t finish. Try again',
+report:'Monthly report',fLate:'Overdue',late:'Overdue',lateDays:'{n} days overdue',lateTitle:'Overdue debts',sRemind:'Treat a debt as overdue after',d15:'15 days',d30:'30 days',d60:'60 days',
 remind:'Send payment reminder',lastPay:'Last payment',noPayYet:'No payments yet',daysAgo:'{n} days ago',
 r_hi:'Hello {n},',r_body:'This is a friendly reminder that the balance due on your account with {co} is:',r_last:'Last payment: {d}',r_none:'No payment has been recorded yet.',r_end:'We’d appreciate settling it at your earliest convenience. Thank you for your business.',
 rDep:'Deposited',rIn:'Received (debt paid)',rNet:'Net change in debts',rCount:'Transactions',rNew:'New customers',rChart:'Last 6 months',rTop:'Top customers by deposits this month',rNone:'No transactions this month.',rShare:'Share report as image',rPrep:'Preparing image…',
@@ -741,7 +781,7 @@ function applyLang(l){
 $('#langSeg').addEventListener('click',e=>{ const b=e.target.closest('button'); if(b) applyLang(b.dataset.l); });
 
 /* ---------- store (Firebase) ---------- */
-const DEFAULT_SETTINGS = { company:'Smart Capital Trade', phone:'', footer:null, currency:'USD', reminderDays:30 };
+const DEFAULT_SETTINGS = { company:'Smart Capital Trade', phone:'', footer:null, currency:'USD', reminderDays:30, rate:89500 };
 const S = { customers:[], txns:[], settings:{...DEFAULT_SETTINGS}, mode:'cloud', base:null, user:null, uid:null, readOnly:false, names:{}, authUser:null };
 let AUTH=null, FS=null, unsubs=[];
 
@@ -752,7 +792,7 @@ function initStore(){
   FS.enablePersistence({synchronizeTabs:true}).catch(()=>{});
   AUTH.onAuthStateChanged(u=>{
     unsubs.forEach(f=>f()); unsubs=[];
-    S.customers=[]; S.txns=[]; S.settings={...DEFAULT_SETTINGS};
+    S.customers=[]; S.txns=[]; S.trash=[]; S.settings={...DEFAULT_SETTINGS};
     if(!u){ S.authUser=null; S.uid=null; hideLock(); showAuth(); return; }
     S.authUser=u; S.uid=u.uid; S.base=FS.collection('users').doc(u.uid);
     if(lockOn()) showLock(); else hideLock();
@@ -765,6 +805,7 @@ function subscribe(){
   const fail=e=>{ console.warn(e); toast(t('authErr')); };
   unsubs.push(S.base.onSnapshot(snap=>{ S.settings={...DEFAULT_SETTINGS,...(snap.exists?(snap.data().settings||{}):{})}; if(!first.s){first.s=true;ready();} else render(); },fail));
   unsubs.push(S.base.collection('customers').onSnapshot(q=>{ S.customers=q.docs.map(d=>({id:d.id,...d.data()})); if(!first.c){first.c=true;ready();} else render(); },fail));
+  unsubs.push(S.base.collection('trash').onSnapshot(q=>{ S.trash=q.docs.map(d=>({id:d.id,...d.data()})); purgeTrash(); renderTrashBadge(); if(sheetOpen&&$('#trashList')) drawTrash(); },()=>{}));
   unsubs.push(S.base.collection('txns').onSnapshot(q=>{ S.txns=q.docs.map(d=>({id:d.id,...d.data()})); if(!first.t){first.t=true;ready();} else render(); },fail));
 }
 async function put(kind,obj){ const {id,...data}=obj; await S.base.collection(kind).doc(id).set(data); }
@@ -954,7 +995,16 @@ function setVC(c){
   render(); if(openCust&&sheetOpen) refreshCustSheet(); if(repYM&&sheetOpen&&$('#rPrev')) refreshReport();
 }
 document.addEventListener('click',e=>{ const b=e.target.closest('.curtabs button'); if(b){ e.stopPropagation(); setVC(b.dataset.v); } },true);
-const isOpening=x=>x.opening||x.note==='رصيد سابق'||x.note==='Previous balance';
+const isOpening=x=>x.opening||x.conversion||x.note==='رصيد سابق'||x.note==='Previous balance';
+const getRate=()=>+S.settings.rate>0?+S.settings.rate:89500;
+const daysUntil=d=>{ if(!d) return 0; const a=new Date(today()+'T12:00:00'), b=new Date(d+'T12:00:00'); return Math.round((b-a)/864e5); };
+function dueInfo(c,cur){
+  const mine=S.txns.filter(x=>x.customerId===c.id&&curOf(x)===cur).sort((a,b)=>(a.date||'').localeCompare(b.date||'')||(a.createdAt||0)-(b.createdAt||0));
+  let bal=0, pend=[];
+  for(const x of mine){ bal+=signed(x); if(bal<=0||near0(bal,cur)) pend=[]; else if(x.type==='deposit'&&x.dueDate) pend.push(x.dueDate); }
+  if(!(bal>0)||near0(bal,cur)||!pend.length) return null;
+  return pend.sort()[0];
+}
 const remDays=()=>[15,30,60].includes(+S.settings.reminderDays)?+S.settings.reminderDays:30;
 let pendingRem=30;
 const daysSince=d=>{ if(!d) return 0; const a=new Date(today()+'T12:00:00'), b=new Date(d+'T12:00:00'); return Math.max(0,Math.round((a-b)/864e5)); };
@@ -964,24 +1014,35 @@ function lateInfo(c,cur){
   const pays=mine.filter(x=>x.type==='payment'&&!isOpening(x)).map(x=>x.date||'').sort();
   const deps=mine.filter(x=>x.type==='deposit').map(x=>x.date||'').sort();
   const lastPay=pays.length?pays[pays.length-1]:null;
+  const due=dueInfo(c,cur);
+  if(due){ const left=daysUntil(due); return {days:Math.max(0,-left),lastPay,late:left<0,due,daysLeft:left}; }
   const ref=lastPay||deps[0]||today();
   const days=daysSince(ref);
-  return {days,lastPay,late:days>=remDays()};
+  return {days,lastPay,late:days>=remDays(),due:null,daysLeft:null};
 }
 function reminderText(c,cur){
   const v=balances(c.id)[cur], li=lateInfo(c,cur), co=S.settings.company||'Smart Capital Trade';
   const L=[t('r_hi',{n:c.name}),'',t('r_body',{co}),`*${money(v,cur)}*`,''];
+  if(li&&li.due) L.push(t('r_due',{d:fdate(li.due)}));
   L.push(li&&li.lastPay?t('r_last',{d:fdate(li.lastPay)}):t('r_none'));
   L.push('',t('r_end'));
   if(S.settings.phone) L.push(`${t('w_contact')}: ${S.settings.phone}`);
   return L.join('\n');
 }
+function statusTag(c,st){
+  const li=lateInfo(c,VC);
+  if(li&&li.late) return `<span class="tag t-late">${t('lateDays',{n:li.days})}</span>`;
+  if(li&&li.due&&li.daysLeft<=7) return `<span class="tag t-due">${li.daysLeft===0?t('dueToday'):t('dueIn',{n:li.daysLeft})}</span>`;
+  return `<span class="tag t-${st}">${t(st)}</span>`;
+}
 function custRow(c){
-  const v=balances(c.id)[VC],st=st1(v,VC);
-  return `<button class="item" data-cust="${esc(c.id)}">
+  const v=balances(c.id)[VC],st=st1(v,VC), digits=(c.phone||'').replace(/\D/g,'');
+  const quick=digits?`<span class="qbs"><a class="qb" data-quick href="tel:+${digits}" aria-label="${t('call')}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></a><a class="qb wa" data-quick href="https://wa.me/${digits}" target="_blank" rel="noopener" aria-label="${t('chat')}">${ICON.wa}</a></span>`:'';
+  return `<div class="item" role="button" tabindex="0" data-cust="${esc(c.id)}">
     <span class="av" style="background:${avColor(c.id)}">${esc(initials(c.name))}</span>
     <span class="mid"><b>${esc(c.name)}</b><small class="num">${esc(c.phone||t('noPhone'))}</small></span>
-    <span class="end"><span class="bl num c-${st}">${money(Math.abs(v),VC)}</span>${(()=>{ const li=lateInfo(c,VC); return li&&li.late?`<span class="tag t-late">${t('lateDays',{n:li.days})}</span>`:`<span class="tag t-${st}">${t(st)}</span>`; })()}</span></button>`;
+    ${quick}
+    <span class="end"><span class="bl num c-${st}">${money(Math.abs(v),VC)}</span>${statusTag(c,st)}</span></div>`;
 }
 function txRow(x,showName=true){
   const c=cust(x.customerId),dep=x.type==='deposit',lbl=dep?t('depLabel'):t('payLabel');
@@ -1004,7 +1065,9 @@ function render(){
   const sumOut=month.filter(x=>x.type==='deposit'&&!isOpening(x)).reduce((s,x)=>s+x.amount,0);
   const sumIn=month.filter(x=>x.type==='payment'&&!isOpening(x)).reduce((s,x)=>s+Math.max(0,Math.min(x.amount,balanceBefore(x))),0);
   countTo($('#hTotal'),due,v=>money(v,VC));
-  $('#hTotalL').textContent=''; $('#hInL').textContent=''; $('#hOutL').textContent='';
+  $('#hInL').textContent=''; $('#hOutL').textContent='';
+  { const o=VC==='USD'?'LBP':'USD', dueO=S.customers.reduce((s,c)=>{ const v=balances(c.id)[o]; return v>0?s+v:s; },0), r=getRate();
+    $('#hTotalL').textContent = dueO>0 ? `${t(VC==='USD'?'withLBP':'withUSD')} ≈ ${money(VC==='USD'?due+dueO/r:due+dueO*r,VC)}` : ''; }
   countTo($('#hIn'),sumIn,v=>money(v,VC,true));
   countTo($('#hOut'),sumOut,v=>money(v,VC,true));
   countTo($('#hCount'),S.customers.filter(c=>bal(c)>0 && !near0(bal(c),VC)).length,v=>Math.round(v));
@@ -1018,6 +1081,8 @@ function render(){
   $('#creditCard').classList.toggle('zero',!credits.length);
   $('#crSection').hidden=!credits.length;
   $('#creditList').innerHTML=credits.slice(0,4).map(custRow).join('');
+  const dues=S.customers.map(c=>({c,li:lateInfo(c,VC)})).filter(x=>x.li&&x.li.due&&!x.li.late&&x.li.daysLeft<=7).sort((a,b)=>a.li.daysLeft-b.li.daysLeft);
+  $('#dueSection').hidden=!dues.length; $('#dueList').innerHTML=dues.map(x=>custRow(x.c)).join('');
   const lates=S.customers.map(c=>({c,li:lateInfo(c,VC)})).filter(x=>x.li&&x.li.late);
   $('#lateCard').hidden=!lates.length;
   if(lates.length){ $('#ltTitle').textContent=t('lateTitle',{n:remDays()}); $('#ltTotal').textContent=money(lates.reduce((s,x)=>s+bal(x.c),0),VC); $('#ltCount').textContent=t('custCount',{n:lates.length}); }
@@ -1044,7 +1109,7 @@ function renderMe(){
   box.hidden=false;
 }
 /* ---------- navigation ---------- */
-function fillSettings(){ $('#sCo').value=S.settings.company||''; $('#sPhone').value=S.settings.phone||''; $('#sFoot').value=footerText(); pendingCur=S.settings.currency||'USD'; pendingRem=remDays(); $$('#remSeg button').forEach(b=>b.classList.toggle('on',+b.dataset.d===pendingRem)); loadXLSX().catch(()=>{}); }
+function fillSettings(){ $('#sCo').value=S.settings.company||''; $('#sPhone').value=S.settings.phone||''; $('#sFoot').value=footerText(); pendingCur=S.settings.currency||'USD'; $('#sRate').value=getRate(); pendingRem=remDays(); $$('#remSeg button').forEach(b=>b.classList.toggle('on',+b.dataset.d===pendingRem)); loadXLSX().catch(()=>{}); }
 function go(v){
   $$('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));
   $$('.nb').forEach(b=>b.classList.toggle('on',b.dataset.go===v));
@@ -1096,7 +1161,7 @@ function customerForm(c){
   };
   if(c) $('#fDel').onclick=async()=>{
     if(!confirm(t('confirmDelCust',{n:c.name}))) return;
-    try{ for(const x of S.txns.filter(x=>x.customerId===c.id)) await del('txns',x.id); await del('customers',c.id); closeSheet(); toast(t('custDeleted')); }
+    try{ const rel=S.txns.filter(x=>x.customerId===c.id); await toTrash('customer',c,rel); for(const x of rel) await del('txns',x.id); await del('customers',c.id); closeSheet(); toast(t('movedTrash')); }
     catch(e){ markWrite(e); toast(t('saveFail')); }
   };
 }
@@ -1109,13 +1174,14 @@ function custSheetHTML(c){
     ${TABS_HTML()}
     <div class="balbox" style="background:var(--${st}-bg)"><span>${st==='owe'?t('dueOn'):st==='credit'?t('creditFor'):t('balance')}</span>
       ${st==='paid'?`<b class="c-paid">${t('fullyPaid')}</b>`:`<b class="num c-${st}">${money(Math.abs(v),VC)}</b>`}
-      ${(()=>{ const li=lateInfo(c,VC); if(!li) return ''; return `<small class="bal-sub ${li.late?'is-late':''}">${li.lastPay?`${t('lastPay')}: ${fdate(li.lastPay)} · ${t('daysAgo',{n:daysSince(li.lastPay)})}`:t('noPayYet')}${li.late?` · ${t('late')}`:''}</small>`; })()}</div>
+      ${(()=>{ const li=lateInfo(c,VC); if(!li) return ''; return `<small class="bal-sub ${li.late?'is-late':''}">${li.due?`${t('dueOn2',{d:fdate(li.due)})} · `:''}${li.lastPay?`${t('lastPay')}: ${fdate(li.lastPay)}`:t('noPayYet')}${li.late?` · ${t('late')}`:''}</small>`; })()}</div>
     ${st==='owe'?`<a class="btn btn-remind ${(lateInfo(c,VC)||{}).late?'hot':''}" target="_blank" rel="noopener" href="${waLink(c,reminderText(c,VC))}" style="margin-bottom:14px">${ICON.wa} ${t('remind')}</a>`:''}
     <div class="mini-acts">
       <button class="w" data-act="cust-deposit"><span class="ic" style="background:var(--owe-bg);color:var(--owe)">${ICON.up}</span>${t('depLabel')}</button>
       <button class="w" data-act="cust-payment"><span class="ic" style="background:var(--paid-bg);color:var(--paid)">${ICON.down}</span>${t('recvFrom')}</button>
-      <a target="_blank" rel="noopener" href="${waLink(c,statementText(c,VC))}"><span class="ic" style="background:rgba(31,175,90,.14);color:#1FAF5A">${ICON.wa}</span>${t('statement')}</a>
+      <button data-act="cust-statement"><span class="ic" style="background:rgba(31,175,90,.14);color:#1FAF5A">${ICON.wa}</span>${t('statement')}</button>
     </div>
+    ${st!=='paid'?`<button class="btn btn-g w conv-btn" data-act="cust-convert">⇄ ${t('convert',{c:t(VC==='USD'?'lbpName':'usdName')})}</button>`:''}
     <h2 class="sec" style="margin:4px 2px 8px"><span>${t('txns')}</span> <button class="w" data-act="cust-edit">${t('editData')}</button></h2>
     <div class="panel">${tx.length?tx.map(x=>txRow(x,false)).join(''):`<div class="empty" style="padding:22px"><b>${t('noTxT')}</b>${t('noCustTx')}</div>`}</div>`;
 }
@@ -1124,29 +1190,32 @@ function openCustomer(id){ const c=cust(id); if(!c) return; openSheet(t('custAcc
 function refreshCustSheet(){ const c=cust(openCust); if(!c){ closeSheet(); return; } const st=$('#shBody').scrollTop; $('#shBody').innerHTML=custSheetHTML(c); $('#shBody').scrollTop=st; }
 
 /* ---------- transaction form ---------- */
-function txForm(type='deposit',presetCust=null){
+function txForm(type='deposit',presetCust=null,edit=null){
   if(S.readOnly) return;
   if(!S.customers.length){ customerForm(); toast(t('addFirst')); return; }
-  const defCur=VC;
+  if(edit){ type=edit.type; presetCust=edit.customerId; }
+  const defCur=edit?curOf(edit):VC;
   let selCid=presetCust||'';
-  openSheet(t('newTx'),`
+  openSheet(edit?t('editTx'):t('newTx'),`
     <div class="seg" id="tSeg" data-v="${type}"><span class="pill"></span><button data-v="deposit">${t('depLabel')}</button><button data-v="payment">${t('recvFrom')}</button></div>
     <p class="hint" id="tHint"></p>
     <div class="field"><label>${t('customer')}</label>
       <div class="cpick"><button type="button" class="cp-sel" id="cpSel"></button>
         <div class="cp-list" id="cpList" ${presetCust?'hidden':''}><input class="inp" id="cpSearch" placeholder="${t('search')}" autocomplete="off"><div class="cp-items" id="cpItems"></div></div></div></div>
     <div class="field"><label>${t('currency')}</label><div class="seg cseg" id="cSeg" data-v="${defCur}" style="margin-bottom:0"><span class="pill"></span><button data-v="USD">USD $</button><button data-v="LBP">${LANG==='ar'?'ليرة لبنانية ل.ل':'Lebanese pound LBP'}</button></div></div>
-    <div class="field"><label for="tAmt">${t('amount')}</label><input class="inp num amount-inp" id="tAmt" inputmode="decimal"></div>
-    <div class="field"><label for="tNote">${t('desc')}</label><input class="inp" id="tNote"></div>
-    <div class="field"><label for="tDate">${t('date')}</label><input class="inp" type="date" id="tDate" value="${today()}"></div>
+    <div class="field"><label for="tAmt">${t('amount')}</label><input class="inp num amount-inp" id="tAmt" inputmode="decimal" value="${edit?edit.amount:''}"></div>
+    <div class="field"><label for="tNote">${t('desc')}</label><input class="inp" id="tNote" value="${esc(edit?edit.note||'':'')}"></div>
+    <div class="field"><label for="tDate">${t('date')}</label><input class="inp" type="date" id="tDate" value="${edit?edit.date||today():today()}"></div>
+    <div class="field" id="dueWrap"><label for="tDue">${t('dueDate')}</label><input class="inp" type="date" id="tDue" value="${edit&&edit.dueDate?edit.dueDate:''}"></div>
     <p class="hint" id="tPrev" style="margin-top:-4px"></p>
-    <button class="btn btn-p" id="tSave">${t('saveInv')}</button>`);
+    <button class="btn btn-p" id="tSave">${edit?t('saveChanges'):t('saveInv')}</button>`);
   const seg=$('#tSeg'),cseg=$('#cSeg');
   const upd=()=>{
     const v=seg.dataset.v,cur=cseg.dataset.v,cid=selCid,a=parseAmt($('#tAmt').value)||0;
     $('#tAmt').placeholder = money(0,cur);
     $('#tHint').textContent = v==='deposit'?t('hintDep'):t('hintPay');
-    if(cid){ const b=balances(cid)[cur],nb=b+(v==='deposit'?a:-a);
+    $('#dueWrap').hidden = v!=='deposit';
+    if(cid){ const b=balances(cid)[cur]-(edit&&edit.customerId===cid&&curOf(edit)===cur?signed(edit):0),nb=b+(v==='deposit'?a:-a);
       $('#tPrev').innerHTML=`${t('curBal')} <span class="num">${money(b,cur)}</span> ← ${t('after')} <b class="num c-${near0(nb,cur)?'paid':nb>0?'owe':'credit'}">${money(nb,cur)}</b>`; } else $('#tPrev').textContent='';
   };
   seg.querySelectorAll('button').forEach(b=>b.onclick=()=>{ seg.dataset.v=b.dataset.v; upd(); });
@@ -1169,9 +1238,13 @@ function txForm(type='deposit',presetCust=null){
     const cid=selCid,amt=parseAmt($('#tAmt').value),cur=cseg.dataset.v;
     if(!cid){ $('#cpSel').style.borderColor='var(--owe)'; $('#cpList').hidden=false; drawList(); return; }
     if(!(amt>0)){ $('#tAmt').style.borderColor='var(--owe)'; $('#tAmt').focus(); return; }
-    const x={id:uid('t_'),customerId:cid,type:seg.dataset.v,currency:cur,amount:cur==='LBP'?Math.round(amt):Math.round(amt*100)/100,note:$('#tNote').value.trim(),date:$('#tDate').value||today(),invoiceNo:nextInvoice(),createdAt:Date.now(),createdBy:S.uid||null};
+    const base={customerId:cid,type:seg.dataset.v,currency:cur,amount:cur==='LBP'?Math.round(amt):Math.round(amt*100)/100,note:$('#tNote').value.trim(),date:$('#tDate').value||today()};
+    const due=seg.dataset.v==='deposit'?($('#tDue').value||''):'';
+    const x=edit?{...edit,...base,updatedAt:Date.now()}:{id:uid('t_'),...base,invoiceNo:nextInvoice(),createdAt:Date.now(),createdBy:S.uid||null};
+    if(due) x.dueDate=due; else delete x.dueDate;
     $('#tSave').disabled=true;
-    try{ await put('txns',x); if(S.mode==='cloud'&&!S.txns.some(y=>y.id===x.id)) S.txns.push(x); doneSheet(x); }
+    try{ await put('txns',x); const i=S.txns.findIndex(y=>y.id===x.id); if(i>=0) S.txns[i]=x; else S.txns.push(x);
+      if(edit){ toast(t('txSaved')); render(); showInvoice(x.id); } else doneSheet(x); }
     catch(e){ markWrite(e); $('#tSave').disabled=false; toast(t('saveFail')); }
   };
 }
@@ -1285,6 +1358,113 @@ async function prepReportImage(ym,cur){
     const b=$('#rShare'); if(!b||repYM!==ym) return;
     b.setAttribute('aria-busy','false'); b.querySelector('span').textContent=t('rShare');
     b.onclick=()=>{ const {file,url}=readyRep; if(navigator.canShare&&navigator.canShare({files:[file]})) navigator.share({files:[file]}).catch(e=>{ if(e&&e.name!=='AbortError') showImageFallback(url,file.name); }); else showImageFallback(url,file.name); };
+  }catch(e){ console.warn(e); }
+}
+
+/* ---------- trash ---------- */
+const TRASH_DAYS=30;
+async function toTrash(kind,item,related){ await put('trash',{id:uid('tr_'),kind,item:{...item},related:related.map(r=>({...r})),deletedAt:Date.now()}); }
+function purgeTrash(){ const lim=Date.now()-TRASH_DAYS*864e5; (S.trash||[]).filter(x=>(x.deletedAt||0)<lim).forEach(x=>del('trash',x.id).catch(()=>{})); }
+function renderTrashBadge(){ const n=(S.trash||[]).length, b=$('#trashCount'); if(!b) return; b.hidden=!n; b.textContent=n; }
+function trashSheet(){ openSheet(t('trash'),`<p class="help" style="margin:0 0 12px">${t('trashHelp')}</p><div class="panel" id="trashList"></div>`); drawTrash(); }
+function drawTrash(){
+  const list=[...(S.trash||[])].sort((a,b)=>(b.deletedAt||0)-(a.deletedAt||0));
+  $('#trashList').innerHTML = list.length ? list.map(x=>{ const left=Math.max(0,TRASH_DAYS-Math.floor((Date.now()-(x.deletedAt||0))/864e5));
+    const it=x.item||{}; const isC=x.kind==='customer';
+    const title=isC?esc(it.name||'—'):`${it.type==='deposit'?t('depLabel'):t('payLabel')} · <span class="num">${money(it.amount||0,curOf(it))}</span>`;
+    const sub=isC?t('trashCust',{n:(x.related||[]).length}):`${esc((cust(it.customerId)||{}).name||((S.trash||[]).find(y=>y.kind==='customer'&&y.item&&y.item.id===it.customerId)||{item:{}}).item.name||'—')} · <span class="num">${invLabel(it.invoiceNo)}</span>`;
+    return `<div class="item tr-item"><span class="txi" style="background:var(--surface-2);color:var(--ink-2)">${isC?ICON.users:ICON.doc}</span>
+      <span class="mid"><b>${title}</b><small>${sub} · ${t('trashLeft',{n:left})}</small></span>
+      <span class="tr-acts"><button class="tr-btn" data-restore="${esc(x.id)}">${t('restore')}</button><button class="tr-btn del" data-forever="${esc(x.id)}" aria-label="${t('delForever')}">✕</button></span></div>`; }).join('')
+    : `<div class="empty" style="padding:26px"><b>${t('trashEmpty')}</b></div>`;
+  $('#trashList').onclick=async e=>{
+    const r=e.target.closest('[data-restore]'), f=e.target.closest('[data-forever]');
+    if(r){ const x=(S.trash||[]).find(y=>y.id===r.dataset.restore); if(!x) return; r.disabled=true;
+      try{
+        if(x.kind==='customer'){ await put('customers',x.item); for(const tx of x.related||[]) await put('txns',tx); }
+        else { if(!cust(x.item.customerId)){ toast(t('restoreCustFirst')); r.disabled=false; return; } await put('txns',x.item); }
+        await del('trash',x.id); toast(t('restored'));
+      }catch(err){ toast(t('saveFail')); r.disabled=false; } }
+    if(f){ if(!confirm(t('confirmForever'))) return; try{ await del('trash',f.dataset.forever); }catch(err){ toast(t('saveFail')); } }
+  };
+}
+
+/* ---------- currency conversion ---------- */
+function convertSheet(c){
+  if(!c) return; const from=VC, to=VC==='USD'?'LBP':'USD', v=balances(c.id)[from];
+  if(near0(v,from)) return;
+  openSheet(t('convTitle'),`
+    <div class="conv-box"><div class="conv-from"><small>${t(from==='USD'?'usdName':'lbpName')}</small><b class="num c-${v>0?'owe':'credit'}">${money(Math.abs(v),from)}</b></div>
+      <div class="conv-arrow">⇄</div>
+      <div class="conv-to"><small>${t(to==='USD'?'usdName':'lbpName')}</small><b class="num c-${v>0?'owe':'credit'}" id="convOut"></b></div></div>
+    <div class="field"><label for="convRate">${t('convRate')} (1$ = ? ل.ل)</label><input class="inp num" id="convRate" inputmode="numeric" value="${getRate()}"></div>
+    <p class="hint">${t('convHelp',{from:t(from==='USD'?'usdName':'lbpName'),to:t(to==='USD'?'usdName':'lbpName')})}</p>
+    <button class="btn btn-p" id="convGo">${t('convDo')}</button>`);
+  const calc=()=>{ const r=parseAmt($('#convRate').value)||0; const amt=r>0?(from==='LBP'?Math.round(Math.abs(v)/r*100)/100:Math.round(Math.abs(v)*r)):0; $('#convOut').textContent=money(amt,to); return {r,amt}; };
+  $('#convRate').addEventListener('input',calc); calc();
+  $('#convGo').onclick=async()=>{
+    const {r,amt}=calc(); if(!(r>0)||!(amt>0)) return; $('#convGo').disabled=true;
+    const rs=nf0.format(r), n1=nextInvoice(), now=Date.now();
+    const out={id:uid('t_'),customerId:c.id,type:v>0?'payment':'deposit',currency:from,amount:Math.abs(v),note:t('convNoteTo',{c:t(to==='USD'?'usdName':'lbpName'),r:rs}),date:today(),invoiceNo:n1,createdAt:now,createdBy:S.uid||null,conversion:true};
+    const inn={id:uid('t_'),customerId:c.id,type:v>0?'deposit':'payment',currency:to,amount:amt,note:t('convNoteFrom',{c:t(from==='USD'?'usdName':'lbpName'),r:rs}),date:today(),invoiceNo:n1+1,createdAt:now+1,createdBy:S.uid||null,conversion:true};
+    try{ await put('txns',out); await put('txns',inn); [out,inn].forEach(x=>{ if(!S.txns.some(y=>y.id===x.id)) S.txns.push(x); });
+      toast(t('convDone')); VC=to; ['hTotal','hIn','hOut'].forEach(k=>delete lastVals[k]); render(); openCustomer(c.id); }
+    catch(e){ $('#convGo').disabled=false; toast(t('saveFail')); }
+  };
+}
+
+/* ---------- statement (message or image) ---------- */
+function statementSheet(c){
+  if(!c) return; const cur=VC, tx=sortTx(S.txns.filter(x=>x.customerId===c.id&&curOf(x)===cur)).slice(0,20);
+  openSheet(t('stmtSend'),`<div class="cust-head" style="padding-bottom:8px"><span class="av" style="background:${avColor(c.id)}">${esc(initials(c.name))}</span><h4>${esc(c.name)}</h4><div class="ph">${t(cur==='USD'?'usdName':'lbpName')} · ${t('stmtRows',{n:tx.length})}</div></div>
+    <div class="btn-row"><a class="btn btn-wa" target="_blank" rel="noopener" href="${waLink(c,statementText(c,cur))}">${ICON.wa} ${t('sendText')}</a><button class="btn btn-wa-o" id="stImg" aria-busy="true">${ICON.img} <span>${t('preparing')}</span></button></div>`);
+  prepStatementImage(c,cur);
+}
+async function prepStatementImage(c,cur){
+  try{
+    const AR='IBM Plex Sans Arabic', SER='Cormorant Garamond'; try{ await Promise.all([document.fonts.load(`700 30px "${AR}"`),document.fonts.load(`700 30px "${SER}"`)]); }catch(e){}
+    const logo=await loadLogo(), rtl=LANG==='ar';
+    const all=S.txns.filter(x=>x.customerId===c.id&&curOf(x)===cur).sort((a,b)=>(a.date||'').localeCompare(b.date||'')||(a.createdAt||0)-(b.createdAt||0));
+    let run=0; const rows=all.map(x=>{ run+=signed(x); return {x,run}; }).slice(-20);
+    const v=balances(c.id)[cur], W=1080,P=64,HH=280,RH=82, H=HH+190+90+rows.length*RH+60+170+110;
+    const cv=document.createElement('canvas'); cv.width=W; cv.height=H; const ctx=cv.getContext('2d');
+    const F=(w,s,f=AR)=>`${w} ${s}px "${f}", system-ui, sans-serif`;
+    ctx.fillStyle='#fff'; ctx.fillRect(0,0,W,H);
+    const g=ctx.createLinearGradient(0,0,W,HH); g.addColorStop(0,cur==='LBP'?'#6A2FC0':'#1B2FB0'); g.addColorStop(.55,cur==='LBP'?'#2A1078':'#0B1470'); g.addColorStop(1,'#050A3A'); ctx.fillStyle=g; ctx.fillRect(0,0,W,HH);
+    const LS=140, lx=rtl?W-P-LS:P, ly=(HH-LS)/2; if(logo){ ctx.save(); rrect(ctx,lx,ly,LS,LS,28); ctx.clip(); ctx.drawImage(logo,lx,ly,LS,LS); ctx.restore(); }
+    const tx0=rtl?lx-32:lx+LS+32; ctx.fillStyle='#fff'; ctx.textAlign=rtl?'right':'left';
+    ctx.direction='ltr'; ctx.font=F(700,54,SER); ctx.fillText('Cash Book Smart',tx0,HH/2-6);
+    ctx.direction=rtl?'rtl':'ltr'; ctx.globalAlpha=.85; ctx.font=F(500,30); ctx.fillText(S.settings.company||'Smart Capital Trade',tx0,HH/2+42); ctx.globalAlpha=1;
+    let y=HH+40;
+    ctx.fillStyle='#EEF1FB'; rrect(ctx,P,y,W-2*P,140,28); ctx.fill();
+    ctx.textAlign=rtl?'right':'left'; const sx=rtl?W-P-36:P+36;
+    ctx.fillStyle='#5A6190'; ctx.font=F(500,28); ctx.fillText(`${t('statement')} · ${t(cur==='USD'?'usdName':'lbpName')} · ${fdate(today())}`,sx,y+54);
+    ctx.fillStyle='#0A1150'; ctx.font=F(700,44); ctx.fillText(fitText(ctx,c.name||'—',W-2*P-80),sx,y+110);
+    y+=190;
+    const cw=W-2*P, cols=[[t('date'),.26],[t('op'),.24],[t('amount'),.25],[t('colBal'),.25]];
+    const colX=i=>{ let off=0; for(let k=0;k<i;k++) off+=cols[k][1]*cw; return rtl? W-P-off : P+off; };
+    ctx.fillStyle='#7C83A8'; ctx.font=F(600,26);
+    cols.forEach(([lab],i)=>{ ctx.textAlign=rtl?'right':'left'; ctx.fillText(lab,colX(i),y+30); });
+    ctx.strokeStyle='#D5D9EA'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(P,y+50); ctx.lineTo(W-P,y+50); ctx.stroke();
+    y+=60;
+    rows.forEach(({x,run},ri)=>{ const dep=x.type==='deposit';
+      if(ri%2===0){ ctx.fillStyle='#F7F8FD'; ctx.fillRect(P,y,cw,RH); }
+      ctx.textAlign=rtl?'right':'left';
+      ctx.fillStyle='#0A1150'; ctx.font=F(500,26); ctx.fillText(x.date||'',colX(0),y+52);
+      ctx.fillStyle=dep?'#C2334D':'#0B8A5B'; ctx.font=F(600,26); ctx.fillText(dep?t('w_depS'):t('w_payS'),colX(1),y+52);
+      ctx.font=F(700,26); ctx.fillText(fitText(ctx,(dep?'+':'−')+money(x.amount,cur),cols[2][1]*cw-12),colX(2),y+52);
+      ctx.fillStyle='#0A1150'; ctx.font=F(600,26); ctx.fillText(fitText(ctx,money(run,cur),cols[3][1]*cw-12),colX(3),y+52);
+      y+=RH; });
+    if(!rows.length){ ctx.fillStyle='#7C83A8'; ctx.font=F(500,28); ctx.textAlign='center'; ctx.fillText(t('w_none'),W/2,y+50); y+=RH; }
+    y+=40; ctx.fillStyle='#EEF1FB'; rrect(ctx,P,y,W-2*P,140,30); ctx.fill();
+    ctx.textAlign=rtl?'right':'left'; ctx.fillStyle='#4A5182'; ctx.font=F(600,32); ctx.fillText(near0(v,cur)?t('fullyPaid'):(v>0?t('dueBal'):t('creditBal')),rtl?W-P-40:P+40,y+84);
+    ctx.textAlign=rtl?'left':'right'; ctx.fillStyle=v>0?'#C2334D':'#0A1150'; ctx.font=F(700,52); ctx.fillText(money(Math.abs(v),cur),rtl?P+40:W-P-40,y+90);
+    ctx.textAlign='center'; ctx.fillStyle='#7C83A8'; ctx.font=F(500,26); const ft=[footerText()||'',S.settings.phone||''].filter(Boolean).join(' · '); if(ft) ctx.fillText(ft,W/2,H-50);
+    const blob=await new Promise(r=>cv.toBlob(r,'image/png'));
+    const file=new File([blob],`statement-${(c.name||'customer').replace(/\s+/g,'_')}-${cur}.png`,{type:'image/png'}), url=URL.createObjectURL(blob);
+    const b=$('#stImg'); if(!b) return;
+    b.setAttribute('aria-busy','false'); b.querySelector('span').textContent=t('sendImage');
+    b.onclick=()=>{ if(navigator.canShare&&navigator.canShare({files:[file]})) navigator.share({files:[file]}).catch(e=>{ if(e&&e.name!=='AbortError') showImageFallback(url,file.name); }); else showImageFallback(url,file.name); };
   }catch(e){ console.warn(e); }
 }
 
@@ -1439,14 +1619,18 @@ function showInvoice(id){
     <div class="btn-row"><a class="btn btn-wa" target="_blank" rel="noopener" href="${waLink(c,invoiceText(x))}">${ICON.wa} ${t('sendText')}</a><button class="btn btn-wa-o" id="imgBtn" aria-busy="true">${ICON.img} <span>${t('preparing')}</span></button></div>
     ${c&&!c.phone?`<p class="hint" style="margin:8px 2px 0">${t('noPhoneHint')}</p>`:''}
     <div style="height:10px"></div>
-    <div class="btn-row"><button class="btn btn-g" data-cust="${esc(x.customerId)}">${t('custAccount')}</button><button class="btn btn-d w" id="iDel">${t('delTx')}</button></div>`);
-  $('#iDel').onclick=async()=>{ if(!confirm(t('confirmDelTx'))) return; try{ await del('txns',x.id); closeSheet(); toast(t('txDeleted')); }catch(e){ markWrite(e); toast(t('saveFail')); } };
+    <div class="btn-row"><button class="btn btn-g" data-cust="${esc(x.customerId)}">${t('custAccount')}</button><button class="btn btn-g w" id="iEdit">✏️ ${t('edit')}</button></div>
+    <div style="height:10px"></div>
+    <button class="btn btn-d w" id="iDel">${t('delTx')}</button>`);
+  $('#iEdit').onclick=()=>txForm(x.type,x.customerId,x);
+  $('#iDel').onclick=async()=>{ if(!confirm(t('confirmDelTx'))) return; try{ await toTrash('txn',x,[]); await del('txns',x.id); closeSheet(); toast(t('movedTrash')); }catch(e){ markWrite(e); toast(t('saveFail')); } };
   prepImage(x);
   if(x.createdBy) nameOf(x.createdBy).then(n=>{ const el=$('#invBy'); if(el&&n){ el.querySelector('b').textContent=n; el.hidden=false; } });
 }
 
 /* ---------- events ---------- */
 document.addEventListener('click',e=>{
+  if(e.target.closest('[data-quick]')) return;
   const g=e.target.closest('[data-go]'); if(g){ go(g.dataset.go); return; }
   const cu=e.target.closest('[data-cust]'); if(cu){ openCustomer(cu.dataset.cust); return; }
   const tx=e.target.closest('[data-tx]'); if(tx){ showInvoice(tx.dataset.tx); return; }
@@ -1460,6 +1644,8 @@ document.addEventListener('click',e=>{
   else if(act==='cust-deposit') txForm('deposit',oc);
   else if(act==='cust-payment') txForm('payment',oc);
   else if(act==='cust-edit') customerForm(cust(oc));
+  else if(act==='cust-statement') statementSheet(cust(oc));
+  else if(act==='cust-convert') convertSheet(cust(oc));
 });
 const openCredits=()=>{ cFilter='credit'; $$('#cFilter .chip').forEach(x=>x.classList.toggle('on',x.dataset.f==='credit')); go('customers'); render(); };
 $('#creditCard').onclick=openCredits; $('#crAll').onclick=openCredits;
@@ -1467,6 +1653,8 @@ $('#lateCard').onclick=()=>{ cFilter='late'; $$('#cFilter .chip').forEach(x=>x.c
 $('#remSeg').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; pendingRem=+b.dataset.d; $$('#remSeg button').forEach(x=>x.classList.toggle('on',x===b)); });
 $('#reportBtn').onclick=()=>openReport(today().slice(0,7));
 $('#xlsBtn').onclick=()=>exportXLSX();
+$('#trashBtn').onclick=()=>trashSheet();
+document.addEventListener('keydown',e=>{ if((e.key==='Enter'||e.key===' ')&&e.target.matches&&e.target.matches('div[data-cust]')){ e.preventDefault(); openCustomer(e.target.dataset.cust); } });
 $('#cSearch').addEventListener('input',render);
 $('#cFilter').addEventListener('click',e=>{ const b=e.target.closest('.chip'); if(!b) return; cFilter=b.dataset.f; $$('#cFilter .chip').forEach(x=>x.classList.toggle('on',x===b)); render(); });
 $('#tFilter').addEventListener('click',e=>{ const b=e.target.closest('.chip'); if(!b) return; tFilter=b.dataset.f; $$('#tFilter .chip').forEach(x=>x.classList.toggle('on',x===b)); render(); });
@@ -1475,7 +1663,7 @@ let pendingCur='USD';
 $('#curSeg').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b||S.readOnly) return; pendingCur=b.dataset.c; $$('#curSeg button').forEach(x=>x.classList.toggle('on',x===b)); });
 $('#saveSettings').onclick=async()=>{
   const b=$('#saveSettings'); b.disabled=true;
-  try{ await saveSettingsData({company:$('#sCo').value.trim()||'Smart Capital Trade',phone:$('#sPhone').value.trim(),footer:$('#sFoot').value.trim(),currency:pendingCur,reminderDays:pendingRem}); toast(t('settingsSaved')); }
+  try{ await saveSettingsData({company:$('#sCo').value.trim()||'Smart Capital Trade',phone:$('#sPhone').value.trim(),footer:$('#sFoot').value.trim(),currency:pendingCur,reminderDays:pendingRem,rate:(parseAmt($('#sRate').value)>0?Math.round(parseAmt($('#sRate').value)):getRate())}); toast(t('settingsSaved')); }
   catch(e){ markWrite(e); toast(t('saveFail')); }
   b.disabled=false;
 };
