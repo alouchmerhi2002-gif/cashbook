@@ -408,6 +408,12 @@ div.item:hover{background:var(--surface-2)}
 .conv-box b{display:block;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .conv-arrow{font-size:22px;color:var(--accent-2);flex:none}
 .hero .sub{font-size:13.5px;font-weight:500;opacity:.9}
+.sheet{max-width:min(620px,100vw);overflow:hidden}
+.sh-body{overflow-x:hidden;overscroll-behavior:contain;touch-action:pan-y}
+.sh-body *{min-width:0}
+.field,.cpick,.seg,.row2,.btn-row{max-width:100%}
+input[type=date].inp{-webkit-appearance:none;appearance:none;display:block;width:100%;min-width:0;max-width:100%;text-align:start;line-height:48px}
+input[type=date].inp::-webkit-date-and-time-value{text-align:start;margin:0}
 .theme-seg button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 @media (max-width:380px){.hero .big{font-size:34px}.hero .row{grid-template-columns:1fr 1fr}.hero .cell:last-child{display:none}}
@@ -1041,7 +1047,6 @@ function custRow(c){
   return `<div class="item" role="button" tabindex="0" data-cust="${esc(c.id)}">
     <span class="av" style="background:${avColor(c.id)}">${esc(initials(c.name))}</span>
     <span class="mid"><b>${esc(c.name)}</b><small class="num">${esc(c.phone||t('noPhone'))}</small></span>
-    ${quick}
     <span class="end"><span class="bl num c-${st}">${money(Math.abs(v),VC)}</span>${statusTag(c,st)}</span></div>`;
 }
 function txRow(x,showName=true){
